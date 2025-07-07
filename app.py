@@ -4,9 +4,14 @@ from transformers import BertTokenizer, BertForSequenceClassification
 import spacy
 import re
 import pandas as pd
+import subprocess
 
-# Load spacy model
-nlp = spacy.load("en_core_web_sm")
+# Load spacy model, install if missing
+try:
+    nlp = spacy.load("en_core_web_sm")
+except OSError:
+    subprocess.run(["python", "-m", "spacy", "download", "en_core_web_sm"])
+    nlp = spacy.load("en_core_web_sm")
 
 # Load model, tokenizer, and label encoder
 model = BertForSequenceClassification.from_pretrained("sentiment_model")
